@@ -14,9 +14,11 @@ function employeePrompt(employeeNumber) {
                     const hoursWorked = parseFloat(hours);
 
                     if (isNaN(hourlyRate) || hourlyRate < 0) {
-                        console.log("Values must be positive numbers");
-                    } else if (isNaN(hoursWorked) || hoursWorked < 0) {
-                        console.log("Values must be positive numbers");
+                        console.log("Hourly rate must be positive number");
+                        resolve(promptEmployee(employeeNumber));
+                    } else if (isNaN(hoursWorked) || hoursWorked < 0 || hoursWorked > 80) {
+                        console.log("Hours worked must be between 0 and 80");
+                        resolve(promptEmployee(employeeNumber));
                     } else {
                         resolve({ 
                             name: name, 
