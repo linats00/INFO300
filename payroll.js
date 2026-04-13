@@ -40,8 +40,7 @@ async function main() {
         employees.push(employee);
     }
 
-    console.log("\nPayroll Information:");
-    employees.forEach((emp, i) => {
+    const payrollData = employees.map(emp => {
         let regularHours, overtimeHours;
 
         if (emp.hoursWorked > 40) {
@@ -56,9 +55,25 @@ async function main() {
         const overtimePay = overtimeHours * emp.hourlyRate * 1.5;
         const totalPay = regularPay + overtimePay;
 
-        console.log(`${i + 1}. ${emp.name} - Regular Pay: $${regularPay.toFixed(2)}, Overtime Pay: $${overtimePay.toFixed(2)}, Total Pay: $${totalPay.toFixed(2)}`);
+        return {
+            name: emp.name,
+            totalHours: emp.hoursWorked,
+            regularPay: regularPay,
+            overtimePay: overtimePay,
+            totalPay: totalPay
+        };
+
     });
 
+    console.log("\nPayroll Data:");
+    payrollData.forEach(emp => {
+        console.log(`Employee: ${emp.name}`);
+        console.log(`  Total Hours: ${emp.totalHours}`);
+        console.log(`  Regular Pay: $${emp.regularPay.toFixed(2)}`);
+        console.log(`  Overtime Pay: $${emp.overtimePay.toFixed(2)}`);
+        console.log(`  Total Pay: $${emp.totalPay.toFixed(2)}`);
+    });
+    
     rl.close();
 }
 
