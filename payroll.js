@@ -15,10 +15,10 @@ function employeePrompt(employeeNumber) {
 
                     if (isNaN(hourlyRate) || hourlyRate < 0) {
                         console.log("Hourly rate must be positive number");
-                        resolve(promptEmployee(employeeNumber));
+                        resolve(employeePrompt(employeeNumber));
                     } else if (isNaN(hoursWorked) || hoursWorked < 0 || hoursWorked > 80) {
                         console.log("Hours worked must be between 0 and 80");
-                        resolve(promptEmployee(employeeNumber));
+                        resolve(employeePrompt(employeeNumber));
                     } else {
                         resolve({ 
                             name: name, 
@@ -65,15 +65,25 @@ async function main() {
 
     });
 
+    let highestPaidEmployee = payrollData[0];
+    for (let i = 1; i < payrollData.length; i++) {
+        if (payrollData[i].totalPay > highestPaidEmployee.totalPay) {
+            highestPaidEmployee = payrollData[i];
+        }
+    }
+
     console.log("\nPayroll Data:");
     payrollData.forEach(emp => {
-        console.log(`Employee: ${emp.name}`);
+        const prefix = emp === highestPaidEmployee ? ">> Highest Paid Employee: " : "Employee: ";
+        console.log(`${prefix}${emp.name}`);
         console.log(`  Total Hours: ${emp.totalHours}`);
         console.log(`  Regular Pay: $${emp.regularPay.toFixed(2)}`);
         console.log(`  Overtime Pay: $${emp.overtimePay.toFixed(2)}`);
         console.log(`  Total Pay: $${emp.totalPay.toFixed(2)}`);
     });
-    
+
+    console.log(`\nTop earner: ${highestPaidEmployee.name} with $${highestPaidEmployee.totalPay.toFixed(2)} total pay.`);
+
     rl.close();
 }
 
