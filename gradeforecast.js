@@ -42,17 +42,51 @@ function promptForMoreScores() {
     });
 }
 
+function getLetterGrade(score) {
+    if (score >= 90) {
+        return 'A';
+    }
+    else if (score >= 80) {
+        return 'B';
+    }
+    else if (score >= 70) {
+        return 'C';
+    }
+    else if (score >= 60) {
+        return 'D';
+    }
+    return 'F';
+}
+
+function compareGrades(current, projected) {
+    if (projected > current) return 'improved';
+    if (projected < current) return 'declined';
+    return 'stayed the same';
+}
+
 async function main() {
     const currentGrade = await promptForCurrentGrade();
     console.log(`Current grade: ${currentGrade}`);
 
+    const finalExamScores = [];
     let moreScores = true;
+
     while (moreScores) {
         const examScore = await promptForFinalExamScore();
-        const projectedGrade = currentGrade * 0.75 + examScore * 0.25;
-        console.log(`With a final exam score of ${examScore}, your final grade would be ${projectedGrade.toFixed(2)}.`);
-
+        finalExamScores.push(examScore);
         moreScores = await promptForMoreScores();
+    }
+
+    console.log("\nResults:");
+    for (const examScore of finalExamScores) {
+        const finalCourseAverage = currentGrade * 0.75 + examScore * 0.25;
+        const letterGrade = getLetterGrade(finalCourseAverage);
+        const trend = compareGrades(currentGrade, finalCourseAverage);
+
+        console.log(`\nFinal Exam Score: ${examScore}`);
+        console.log(`Final Course Average: ${finalCourseAverage.toFixed(2)}`);
+        console.log(`Letter Grade: ${letterGrade}`);
+        console.log(`Grade ${trend}.`);
     }
 
     rl.close();
